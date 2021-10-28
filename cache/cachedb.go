@@ -1,6 +1,8 @@
 package cache
 
 import (
+	models "go-cache-mongo/model"
+	"sync"
 	"time"
 )
 
@@ -15,6 +17,7 @@ type Cache struct {
 type cache struct {
 	defaultExpiration time.Duration
 	items             map[string]Item
+	mutex             sync.RWMutex
 }
 
 func (item Item) Expired() bool {
@@ -23,6 +26,24 @@ func (item Item) Expired() bool {
 	}
 	//If item has expired return true
 	return time.Now().UnixNano() > item.Expiration
+}
+
+//Adds item to cache
+//If exist item key, this item will update
+func (c *cache) Set(data models.KeyValData, i interface{}) error {
+	key := data.Key
+	c.mutex.Lock()
+	c.items[key] = Item{
+		Object: i,
+	}
+	c.mutex.Unlock()
+	return nil
+}
+func (c *cache) set(data models.KeyValData, i interface{}) {
+	key := data.Key
+	c.items[key] = Item{
+		Object: i,
+	}
 }
 
 //Creates new cache
