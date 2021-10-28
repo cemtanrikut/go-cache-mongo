@@ -54,6 +54,17 @@ func (c *cache) Get(data models.KeyValData) (interface{}, bool) {
 	return item.Object, true
 }
 
+//Gets all items in cache
+func (c *cache) Items() map[string]Item {
+	c.mutex.RLock()
+	defer c.mutex.RUnlock()
+	m := make(map[string]Item, len(c.items))
+	for c, t := range c.items {
+		m[c] = t
+	}
+	return m
+}
+
 //Creates new cache
 func New(defaultExpiration, cleanupInterval time.Duration) *Cache {
 	items := make(map[string]Item)
