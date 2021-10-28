@@ -51,3 +51,20 @@ func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findO
 	}
 	return response
 }
+
+func GetItem(key string, collection *mongo.Collection) *model.InMemData {
+	var response *model.InMemData
+
+	err := collection.FindOne(context.TODO(), bson.M{"key": key}).Decode(&response)
+
+	if err != nil {
+		fmt.Println("Can't find data ", err)
+		response = &model.InMemData{
+			Key:   "",
+			Value: "",
+		}
+	}
+
+	return response
+
+}

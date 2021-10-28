@@ -1,6 +1,6 @@
 package model
 
-type InMemReqPostData struct {
+type InMemData struct {
 	Key   string `json:"key"`
 	Value string `json:"value"`
 }
