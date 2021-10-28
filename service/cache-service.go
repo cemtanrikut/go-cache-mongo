@@ -1,7 +1,6 @@
 package service
 
 import (
-	"go-cache-mongo/cache"
 	"go-cache-mongo/controller"
 	"go-cache-mongo/model"
 
@@ -9,6 +8,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findOptions *options.FindOptions, c *cache.Cache) {
+func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findOptions *options.FindOptions) {
 	controller.Get(fetchModel, collection, findOptions)
 }
