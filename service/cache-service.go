@@ -17,3 +17,12 @@ func GetItem(key string, collection *mongo.Collection) []model.InMemData {
 	response := controller.GetItem(key, collection)
 	return response
 }
+
+func Set(key string, collection *mongo.Collection) (model.InMemData, error) {
+	respData := model.InMemData{
+		Key:   key,
+		Value: "Getir",
+	}
+	response, err := controller.Set(respData, collection)
+	return response, err
+}
