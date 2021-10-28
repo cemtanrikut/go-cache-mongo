@@ -39,11 +39,19 @@ func (c *cache) Set(data models.KeyValData, i interface{}) error {
 	c.mutex.Unlock()
 	return nil
 }
-func (c *cache) set(data models.KeyValData, i interface{}) {
+
+//Gets the item where has been to cache
+func (c *cache) Get(data models.KeyValData) (interface{}, bool) {
 	key := data.Key
-	c.items[key] = Item{
-		Object: i,
+	c.mutex.RLock()
+	// "Inlining" of get and Expired
+	item, found := c.items[key]
+	if !found {
+		c.mutex.RUnlock()
+		return nil, false
 	}
+	c.mutex.RUnlock()
+	return item.Object, true
 }
 
 //Creates new cache
