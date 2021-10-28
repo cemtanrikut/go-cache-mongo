@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findOptions *options.FindOptions) {
-	controller.Get(fetchModel, collection, findOptions)
+func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findOptions *options.FindOptions) model.FetchMongoRespData {
+	response := controller.Get(fetchModel, collection, findOptions)
+	return response
 }

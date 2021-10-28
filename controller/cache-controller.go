@@ -11,16 +11,22 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findOptions *options.FindOptions) {
+func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findOptions *options.FindOptions) model.FetchMongoRespData {
 	sDate, _ := helper.FormatTime(fetchModel.StartDate)
 	eDate, _ := helper.FormatTime(fetchModel.EndDate)
 
 	var records []model.Record
+	var response model.FetchMongoRespData
 
 	cur, err := collection.Find(context.TODO(), bson.M{"createdAt": bson.M{"$gte": sDate, "$lt": eDate}}, findOptions)
 
 	if err != nil {
 		fmt.Println("Can't find data ", err)
+		response = model.FetchMongoRespData{
+			Code:    0,
+			Msg:     err.Error(),
+			Records: nil,
+		}
 	} else {
 		for cur.Next(context.TODO()) {
 			var elem model.Record
@@ -33,7 +39,15 @@ func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findO
 
 		}
 		cur.Close(context.TODO())
+
 		fmt.Println(records)
 
+		response = model.FetchMongoRespData{
+			Code:    0,
+			Msg:     "Success",
+			Records: records,
+		}
+
 	}
+	return response
 }

@@ -3,9 +3,9 @@ package model
 import "time"
 
 type FetchMongoRespData struct {
-	Code    int    `json:"code"`
-	Msg     string `json:"msg"`
-	Records []int  `json:"records"`
+	Code    int      `json:"code"`
+	Msg     string   `json:"msg"`
+	Records []Record `json:"records"`
 }
 
 type Record struct {
