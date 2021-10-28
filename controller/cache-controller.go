@@ -15,26 +15,25 @@ func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findO
 	sDate, _ := helper.FormatTime(fetchModel.StartDate)
 	eDate, _ := helper.FormatTime(fetchModel.EndDate)
 
-	var testArray []model.TestData
+	var records []model.Record
 
 	cur, err := collection.Find(context.TODO(), bson.M{"createdAt": bson.M{"$gte": sDate, "$lt": eDate}}, findOptions)
 
 	if err != nil {
-		fmt.Println("bulunamadı", err)
+		fmt.Println("Can't find data ", err)
 	} else {
 		for cur.Next(context.TODO()) {
-			var elem model.TestData
+			var elem model.Record
 			err := cur.Decode(&elem)
 			if err != nil {
 				fmt.Println("for err")
 			}
 
-			testArray = append(testArray, elem)
+			records = append(records, elem)
 
 		}
 		cur.Close(context.TODO())
-		fmt.Println(testArray)
+		fmt.Println(records)
 
-		//cache.Cache.Items()
 	}
 }
