@@ -9,5 +9,5 @@ type ResponseData struct {
 type Record struct {
 	Key        string `json:"key"`
 	CreatedAt  string `json:"createdAt"`
-	totalCount int    `json:"totalCount"`
+	TotalCount int    `json:"totalCount"`
 }
