@@ -5,7 +5,9 @@ import (
 	"go-cache-mongo/db"
 	"go-cache-mongo/model"
 	"go-cache-mongo/service"
+	"strings"
 
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
@@ -32,7 +34,14 @@ func main() {
 	//sum := bson.M{"$sum": "$counts.value"}
 	//fmt.Println("sum ", sum)
 
-	response := service.Get(reqFetchMongo, collection, findOptions)
-	fmt.Println(response)
+	responseGet := service.Get(reqFetchMongo, collection, findOptions)
+	fmt.Println(responseGet)
+
+	uuid := uuid.New().String()
+	uuidWithoutHyphens := strings.Replace(uuid, "-", "", -1)
+	fmt.Println("UUID ", uuidWithoutHyphens)
+
+	responseGetItem := service.GetItem("TAKwGc6Jr4i8Z487", collection)
+	fmt.Println(responseGetItem)
 
 }

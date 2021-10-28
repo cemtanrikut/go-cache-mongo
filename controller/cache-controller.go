@@ -52,19 +52,39 @@ func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findO
 	return response
 }
 
-func GetItem(key string, collection *mongo.Collection) *model.InMemData {
-	var response *model.InMemData
+func GetItem(key string, collection *mongo.Collection) []model.InMemData {
+	var responseArray []model.InMemData
 
-	err := collection.FindOne(context.TODO(), bson.M{"key": key}).Decode(&response)
+	cur, err := collection.Find(context.TODO(), bson.M{"key": key})
 
 	if err != nil {
 		fmt.Println("Can't find data ", err)
-		response = &model.InMemData{
-			Key:   "",
-			Value: "",
+	} else {
+		for cur.Next(context.TODO()) {
+			var elem model.InMemData
+			err := cur.Decode(&elem)
+			if err != nil {
+				fmt.Println("for err")
+			}
+
+			responseArray = append(responseArray, elem)
+
 		}
+		cur.Close(context.TODO())
 	}
 
-	return response
+	return responseArray
 
+}
+
+func Set(data model.InMemData, collection *mongo.Collection) (model.InMemData, error) {
+	response := data
+	var req model.InMemData
+
+	_, err := collection.InsertOne(context.TODO(), response)
+	if err != nil {
+		fmt.Println("Insert error ", err)
+		return req, err
+	}
+	return response, nil
 }

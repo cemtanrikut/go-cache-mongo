@@ -12,3 +12,8 @@ func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findO
 	response := controller.Get(fetchModel, collection, findOptions)
 	return response
 }
+
+func GetItem(key string, collection *mongo.Collection) []model.InMemData {
+	response := controller.GetItem(key, collection)
+	return response
+}
