@@ -2,23 +2,19 @@ package main
 
 import (
 	"fmt"
-	"go-cache-mongo/db"
+	"go-cache-mongo/middleware"
 	"go-cache-mongo/model"
 	"go-cache-mongo/service"
 	"strings"
 
 	"github.com/google/uuid"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/gorilla/mux"
 )
 
+var r *mux.Router
+
 func main() {
-	db.MongoClient = db.GetMongoClient("mongodb+srv://challengeUser:WUMglwNBaydH8Yvu@challenge-xzwqd.mongodb.net/getir-case-study?retryWrites=true")
-
-	client := db.MongoClient.Database("getir-case-study")
-	collection := client.Collection("records")
-
-	findOptions := options.Find()
-	findOptions.SetLimit(5)
+	collection, findOptions := middleware.SetMongoClient()
 
 	//query:=bson.M{"eventDateTime":bson.M{"$gte": fromDate, "$lt":toDate}}
 	//query:=bson.M{"field":bson.M{"$in":[]string{"value1","value2"}}}
