@@ -64,7 +64,7 @@ func GetItem(w http.ResponseWriter, r *http.Request) {
 
 	responseGetItem := service.GetItem(key, collection)
 	resp := helper.JsonMarshallGetItem(&responseGetItem)
-	fmt.Println(responseGetItem)
+	fmt.Println(resp)
 	w.Write(resp)
 
 }
