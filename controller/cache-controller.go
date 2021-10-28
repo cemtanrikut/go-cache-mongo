@@ -3,7 +3,6 @@ package controller
 import (
 	"context"
 	"fmt"
-	"go-cache-mongo/cache"
 	"go-cache-mongo/helper"
 	"go-cache-mongo/model"
 
@@ -12,7 +11,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findOptions *options.FindOptions, c *cache.Cache) {
+func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findOptions *options.FindOptions) {
 	sDate, _ := helper.FormatTime(fetchModel.StartDate)
 	eDate, _ := helper.FormatTime(fetchModel.EndDate)
 
@@ -36,6 +35,6 @@ func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findO
 		cur.Close(context.TODO())
 		fmt.Println(testArray)
 
-		c.Items()
+		//cache.Cache.Items()
 	}
 }

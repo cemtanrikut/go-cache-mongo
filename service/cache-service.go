@@ -10,5 +10,5 @@ import (
 )
 
 func Get(fetchModel model.FetchMongoReqData, collection *mongo.Collection, findOptions *options.FindOptions, c *cache.Cache) {
-	controller.Get(fetchModel, collection, findOptions, c)
+	controller.Get(fetchModel, collection, findOptions)
 }
