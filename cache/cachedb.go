@@ -30,7 +30,7 @@ func (item Item) Expired() bool {
 
 //Adds item to cache
 //If exist item key, this item will update
-func (c *cache) Set(data models.KeyValData, i interface{}) error {
+func (c *cache) Set(data models.InMemReqPostData, i interface{}) error {
 	key := data.Key
 	c.mutex.Lock()
 	c.items[key] = Item{
@@ -41,7 +41,7 @@ func (c *cache) Set(data models.KeyValData, i interface{}) error {
 }
 
 //Gets the item where has been to cache
-func (c *cache) Get(data models.KeyValData) (interface{}, bool) {
+func (c *cache) Get(data models.InMemReqPostData) (interface{}, bool) {
 	key := data.Key
 	c.mutex.RLock()
 	// "Inlining" of get and Expired
