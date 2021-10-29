@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"fmt"
 	models "go-cache-mongo/model"
 	"sync"
 	"time"
@@ -58,10 +59,12 @@ func (c *cache) Get(data models.InMemData) (interface{}, bool) {
 func (c *cache) Items() map[string]Item {
 	c.mutex.RLock()
 	defer c.mutex.RUnlock()
+
 	m := make(map[string]Item, len(c.items))
 	for c, t := range c.items {
 		m[c] = t
 	}
+	fmt.Println("Cached items: ", m)
 	return m
 }
 
