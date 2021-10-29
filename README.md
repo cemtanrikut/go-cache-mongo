@@ -25,7 +25,18 @@
     
 
 - ### **/mongodb/fetch** 
- Fetch all data from db
+ Fetch all data from db. Require BODY  
+
+ Sample Json Body,  
+```javascript
+{
+    "startDate": "2016-01-26",
+    "endDate": "2018-02-02",
+    "minCount": 2700,
+    "maxCount": 3000
+}
+```
+
 
  https://go-cache-mongo.herokuapp.com/mongodb/fetch  
  localhost/mongodb/fetch
