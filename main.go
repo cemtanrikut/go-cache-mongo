@@ -30,7 +30,7 @@ func main() {
 	r.HandleFunc("/set", Set).Methods(http.MethodPost)
 	r.HandleFunc("/get/{key}", Get).Methods(http.MethodGet)
 
-	http.ListenAndServe(os.Getenv("PORT"), r)
+	http.ListenAndServe(":"+os.Getenv("PORT"), r)
 
 }
 
