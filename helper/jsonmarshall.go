@@ -13,7 +13,7 @@ func JsonMarshallGet(resp *model.FetchMongoRespData) []byte {
 	return response
 }
 
-func JsonMarshallSet(resp *model.InMemData) []byte {
+func JsonMarshallSet(resp *model.InMemDataMongo) []byte {
 	response, err := json.Marshal(&resp)
 	if err != nil {
 		panic(err)

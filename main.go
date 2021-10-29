@@ -30,20 +30,11 @@ func main() {
 	r.HandleFunc("/set", Set).Methods(http.MethodPost)
 	r.HandleFunc("/get/{key}", Get).Methods(http.MethodGet)
 
-	//fmt.Println(os.Getenv("PORT"))
 	http.ListenAndServe(os.Getenv("PORT"), r)
-
-	//query:=bson.M{"eventDateTime":bson.M{"$gte": fromDate, "$lt":toDate}}
-	//query:=bson.M{"field":bson.M{"$in":[]string{"value1","value2"}}}
-	//bson.M{"$sum": "$counts"}
-	//sum := bson.M{"$sum": "$counts.value"}
-	//fmt.Println("sum ", sum)
-
-	//responseGetItem := service.GetItem("TAKwGc6Jr4i8Z487", collection, c)
-	//fmt.Println(responseGetItem)
 
 }
 
+//Fetch the mongodb items
 func Fetch(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -65,6 +56,7 @@ func Fetch(w http.ResponseWriter, r *http.Request) {
 	w.Write(resp)
 }
 
+//Get items where key includes db any item and set it to cache
 func Get(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -81,13 +73,19 @@ func Get(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//Set item to db and add cache
 func Set(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	generatedUUID := helper.GenerateUUID()
 
-	responseSet, _ := service.Set(generatedUUID, collection, c)
-	resp := helper.JsonMarshallSet(&responseSet)
-	fmt.Println(resp)
-	w.Write(resp)
+	responseSet, err := service.Set(generatedUUID, collection, c)
+	if err != nil {
+		er, _ := json.Marshal(err)
+		w.Write(er)
+	} else {
+		resp := helper.JsonMarshallSet(&responseSet)
+		fmt.Println(resp, err)
+		w.Write(resp)
+	}
 }

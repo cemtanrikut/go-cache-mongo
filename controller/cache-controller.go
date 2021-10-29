@@ -6,6 +6,7 @@ import (
 	"go-cache-mongo/cache"
 	"go-cache-mongo/helper"
 	"go-cache-mongo/model"
+	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"gopkg.in/mgo.v2/bson"
@@ -22,6 +23,7 @@ func Fetch(fetchModel model.FetchMongoReqData, collection *mongo.Collection) mod
 
 	//cur, err := collection.Find(context.TODO(), bson.M{"createdAt": bson.M{"$gte": sDate, "$lt": eDate}})
 
+	//$sum operation doesn't work on my local
 	m := bson.M{
 		"createdAt": bson.M{
 			"$gte": sDate,
@@ -31,9 +33,6 @@ func Fetch(fetchModel model.FetchMongoReqData, collection *mongo.Collection) mod
 		//"totalCount": "totalCount", //bson.M{"$sum": "count"},
 	}
 
-	//m'den gelen key ile db'ye sorgu at (Yeni model oluşturulması gerek). m'deki key ile yeni sorgudaki key eşleştir. counts'u topla, m deki totalCount'a yaz
-
-	//cur, err := collection.Aggregate(context.TODO(), mongo.Pipeline{m})
 	cur, err := collection.Find(context.TODO(), m)
 
 	if err != nil {
@@ -85,6 +84,7 @@ func Fetch(fetchModel model.FetchMongoReqData, collection *mongo.Collection) mod
 	return response
 }
 
+//Gets data from mongo db and creates cache
 func Get(key string, collection *mongo.Collection, c *cache.Cache) []model.InMemData {
 	var responseArray []model.InMemData
 
@@ -109,16 +109,22 @@ func Get(key string, collection *mongo.Collection, c *cache.Cache) []model.InMem
 
 }
 
-func Set(data model.InMemData, collection *mongo.Collection, c *cache.Cache) (model.InMemData, error) {
+func Set(data model.InMemData, collection *mongo.Collection, c *cache.Cache) (model.InMemDataMongo, error) {
 	response := data
-	var req model.InMemData
+	var reqMongo model.InMemDataMongo
 
 	_, err := collection.InsertOne(context.TODO(), response)
 	if err != nil {
 		fmt.Println("Insert error ", err)
-		return req, err
+		return reqMongo, err
 	}
 	c.Set(data, data.Value)
 
-	return response, nil
+	counts := [5]int{100, 200, 300, 400, 500}
+
+	reqMongo.Counts = counts[:]
+	reqMongo.CreatedAt = time.Now()
+	reqMongo.InMemData = data
+
+	return reqMongo, nil
 }

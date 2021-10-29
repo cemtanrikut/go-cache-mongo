@@ -18,7 +18,7 @@ func Get(key string, collection *mongo.Collection, c *cache.Cache) []model.InMem
 	return response
 }
 
-func Set(key string, collection *mongo.Collection, c *cache.Cache) (model.InMemData, error) {
+func Set(key string, collection *mongo.Collection, c *cache.Cache) (model.InMemDataMongo, error) {
 	respData := model.InMemData{
 		Key:   key,
 		Value: "Getir",
